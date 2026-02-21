@@ -115,7 +115,7 @@ function resolveRoute (route, locale) {
  * @this {import('../../types/internal').PluginProxy}
  * @type {Vue['switchLocalePath']}
  */
-function switchLocalePath (locale) {
+function switchLocalePath (locale, { forceRelativePath = false } = {}) {
   const name = this.getRouteBaseName()
   if (!name) {
     return ''
@@ -138,7 +138,7 @@ function switchLocalePath (locale) {
   let path = this.localePath(baseRoute, locale)
 
   // Handle different domains
-  if (i18n.differentDomains) {
+  if (i18n.differentDomains && !forceRelativePath) {
     const getDomainOptions = {
       differentDomains: i18n.differentDomains,
       normalizedLocales: options.normalizedLocales

@@ -17,7 +17,6 @@ import { adjustRouteDefinitionForTrailingSlash, getPageOptions } from './utils'
 export function makeRoutes (baseRoutes, {
   defaultLocale,
   defaultLocaleRouteNameSuffix,
-  differentDomains,
   includeUprefixedFallback,
   localeCodes,
   pages,
@@ -134,8 +133,6 @@ export function makeRoutes (baseRoutes, {
 
       // Add route prefix if needed
       const shouldAddPrefix = (
-        // No prefix if app uses different locale domains
-        !differentDomains &&
         // No need to add prefix if child's path is relative
         !isChildWithRelativePath &&
         // Skip default locale if strategy is PREFIX_EXCEPT_DEFAULT

@@ -73,11 +73,6 @@ export default async (context) => {
       return
     }
 
-    // Abort if different domains option enabled
-    if (!initialSetup && app.i18n.differentDomains) {
-      return
-    }
-
     const oldLocale = app.i18n.locale
 
     if (newLocale === oldLocale) {
@@ -180,7 +175,7 @@ export default async (context) => {
       return ''
     }
 
-    if (!locale || app.i18n.differentDomains || options.strategy === Constants.STRATEGIES.NO_PREFIX) {
+    if (!locale || options.strategy === Constants.STRATEGIES.NO_PREFIX) {
       return ''
     }
 
@@ -193,7 +188,7 @@ export default async (context) => {
     }
 
     // At this point we are left with route that either has no or different locale.
-    let redirectPath = app.switchLocalePath(locale)
+    let redirectPath = app.switchLocalePath(locale, { forceRelativePath: true })
 
     if (!redirectPath) {
       // Current route could be 404 in which case attempt to find matching route for given locale.
@@ -389,12 +384,12 @@ export default async (context) => {
     const { vuex } = options
     if (vuex && vuex.syncLocale && store && store.state[vuex.moduleName].locale !== '') {
       finalLocale = store.state[vuex.moduleName].locale
-    } else if (app.i18n.differentDomains) {
-      const domainLocale = getLocaleDomain(options.normalizedLocales, req)
-      finalLocale = domainLocale
     } else if (options.strategy !== Constants.STRATEGIES.NO_PREFIX) {
       const routeLocale = getLocaleFromRoute(route)
       finalLocale = routeLocale
+    } else if (app.i18n.differentDomains) {
+      const domainLocale = getLocaleDomain(options.normalizedLocales, req)
+      finalLocale = domainLocale
     }
   }
 
